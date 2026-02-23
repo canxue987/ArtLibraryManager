@@ -1,0 +1,257 @@
+/* =========================================================
+   全局重置与容器
+   ========================================================= */
+.container {
+    width: 100%;
+    height: 100%;
+    background-color: rgb(24, 24, 24); /* 更深邃的背景 */
+    font-size: 12px;
+}
+
+/* =========================================================
+   [新] 顶部导航栏 (Header Bar)
+   ========================================================= */
+.header-bar {
+    height: 50px;
+    background-color: rgb(15, 15, 15);
+    flex-direction: row;
+    align-items: center;
+    padding-left: 20px;
+    padding-right: 15px;
+    border-bottom-width: 1px;
+    border-bottom-color: rgb(40, 40, 40);
+}
+
+.window-title {
+    color: rgb(220, 220, 220);
+    -unity-font-style: bold;
+    font-size: 14px;
+    margin-right: 40px;
+}
+
+/* 导航容器 */
+.nav-container {
+    flex-direction: row;
+    height: 100%;
+    align-items: center;
+    flex-grow: 1;
+}
+
+/* 导航按钮/标签 */
+.nav-tab, .nav-tab-label {
+    height: 100%;
+    background-color: transparent;
+    border-width: 0;
+    color: rgb(150, 150, 150);
+    font-size: 13px;
+    -unity-font-style: bold;
+    padding-left: 20px;
+    padding-right: 20px;
+    -unity-text-align: middle-center;
+    border-bottom-width: 3px;
+    border-bottom-color: transparent;
+    margin: 0;
+    cursor: link;
+}
+
+.nav-tab:hover, .nav-tab-dropdown-container:hover .nav-tab-label {
+    color: white;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.nav-tab.active {
+    color: white;
+    border-bottom-color: rgb(46, 134, 222);
+    background-color: rgba(46, 134, 222, 0.1);
+}
+
+/* =========================================================
+   [新] 下拉菜单系统 (Hover Dropdown)
+   ========================================================= */
+.nav-tab-dropdown-container {
+    height: 100%;
+    justify-content: center;
+    position: relative; /* 关键 */
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 50px; /* Header高度 */
+    left: 0;
+    width: 180px;
+    background-color: rgb(35, 35, 35);
+    border-width: 1px;
+    border-color: rgb(60, 60, 60);
+    border-radius: 0 0 4px 4px;
+    padding: 5px 0;
+    display: none; /* 默认隐藏 */
+}
+
+/* 鼠标悬停显示 */
+.nav-tab-dropdown-container:hover .dropdown-menu {
+    display: flex;
+}
+
+.dropdown-item {
+    background-color: transparent;
+    border-width: 0;
+    color: rgb(200, 200, 200);
+    -unity-text-align: middle-left;
+    padding: 10px 15px;
+    height: 35px;
+    font-size: 12px;
+}
+
+.dropdown-item:hover {
+    background-color: rgb(46, 134, 222);
+    color: white;
+}
+
+/* =========================================================
+   侧边栏 (Sidebar) - 精简版
+   ========================================================= */
+.sidebar {
+    width: 200px;
+    background-color: rgb(28, 28, 28);
+    padding: 15px;
+    border-right-width: 1px;
+    border-right-color: rgb(40, 40, 40);
+}
+
+.section-header {
+    color: rgb(100, 100, 100);
+    font-size: 10px;
+    -unity-font-style: bold;
+    margin-bottom: 8px;
+    margin-top: 5px;
+    letter-spacing: 1px;
+}
+
+.icon-btn {
+    background-color: transparent;
+    border-width: 0;
+    color: rgb(150, 150, 150);
+    font-size: 16px;
+    width: 24px;
+    height: 24px;
+    margin: 0; padding: 0;
+}
+.icon-btn:hover { color: white; }
+
+.search-field > #unity-text-input {
+    background-color: rgb(18, 18, 18);
+    border-width: 1px;
+    border-color: rgb(50, 50, 50);
+    border-radius: 15px;
+    padding: 6px 12px;
+    color: white;
+}
+.search-field > #unity-text-input:focus { border-color: rgb(46, 134, 222); }
+
+/* 筛选按钮 */
+.filter-btn {
+    background-color: transparent;
+    border-width: 0;
+    border-radius: 4px;
+    color: rgb(170, 170, 170);
+    margin-bottom: 2px;
+    height: 32px;
+    -unity-text-align: middle-left;
+    padding-left: 12px;
+    font-size: 13px;
+}
+.filter-btn:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: white;
+}
+.filter-btn.active {
+    background-color: rgba(46, 134, 222, 0.15);
+    color: rgb(46, 134, 222);
+    border-left-width: 3px;
+    border-left-color: rgb(46, 134, 222);
+}
+
+/* =========================================================
+   其他保持 (Grid, Modals, Buttons)
+   ========================================================= */
+.content-area {
+    flex-grow: 1;
+    background-color: rgb(24, 24, 24);
+    padding: 15px;
+}
+
+.close-button {
+    background-color: transparent; border-width: 0;
+    color: rgb(150, 150, 150); font-size: 16px; width: 30px; height: 30px;
+}
+.close-button:hover { color: white; background-color: rgb(192, 57, 43); }
+
+/* 模态窗口相关 */
+.confirm-overlay {
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(0, 0, 0, 0.85);
+    align-items: center; justify-content: center; display: flex;
+}
+.modal-window {
+    background-color: rgb(40, 40, 40);
+    border-radius: 8px;
+    border-width: 1px; border-color: rgb(60, 60, 60);
+    flex-direction: row; overflow: hidden;
+}
+.preview-column {
+    flex-grow: 1; background-color: rgb(20, 20, 20);
+    position: relative; border-right-width: 1px; border-right-color: rgb(60, 60, 60);
+}
+.properties-column {
+    width: 400px; padding: 20px; background-color: rgb(45, 45, 45);
+    border-left-width: 1px; border-left-color: rgb(30, 30, 30);
+}
+
+/* 按钮样式 */
+.btn-primary {
+    background-color: rgb(46, 134, 222); color: white;
+    padding: 8px 20px; border-radius: 4px; border-width: 0;
+}
+.btn-primary:hover { background-color: rgb(52, 152, 219); }
+
+.btn-secondary {
+    background-color: rgb(80, 80, 80); color: rgb(220, 220, 220);
+    padding: 8px 15px; border-radius: 4px; border-width: 0; margin-right: 10px;
+}
+.btn-secondary:hover { background-color: rgb(100, 100, 100); }
+
+.btn-danger {
+    background-color: rgb(192, 57, 43); color: white;
+    padding: 8px 15px; border-radius: 4px; border-width: 0;
+}
+
+/* 批量导入 Tab 选择器 */
+.mode-selector {
+    flex-direction: row; margin-right: 20px; background-color: rgb(25, 25, 25);
+    border-radius: 4px; padding: 2px;
+}
+.mode-selector .unity-radio-button__label {
+    color: rgb(150, 150, 150); padding: 6px 15px; margin: 0;
+    border-radius: 3px; -unity-font-style: bold; font-size: 12px;
+}
+.mode-selector .unity-radio-button__checkmark-background { display: none; }
+.mode-selector .unity-radio-button:checked .unity-radio-button__label {
+    background-color: rgb(46, 134, 222); color: white;
+}
+
+/* 资产网格 */
+.asset-grid { flex-direction: row; flex-wrap: wrap; justify-content: flex-start; }
+.asset-item {
+    width: 100px; height: 130px; margin: 5px; background-color: rgb(45, 45, 45);
+    border-radius: 6px; align-items: center; padding: 5px;
+}
+.asset-item:hover { background-color: rgb(60, 60, 60); }
+.asset-icon { width: 90px; height: 90px; border-radius: 4px; margin-bottom: 5px; background-color: rgb(30, 30, 30); }
+.asset-name { color: rgb(200, 200, 200); font-size: 11px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; width: 100%; -unity-text-align: middle-center; }
+
+.loading-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.8); align-items: center; justify-content: center; }
+.progress-track { width: 60%; height: 4px; background-color: rgb(40,40,40); }
+.progress-fill { height: 100%; background-color: rgb(46,134,222); width: 0%; }
+.overlay-hint { position: absolute; background-color: rgba(0,0,0,0.6); padding: 4px 10px; border-radius: 12px; color: rgba(255,255,255,0.6); font-size: 11px; }
+.floating-close-btn { position: absolute; top: 15px; right: 15px; width: 32px; height: 32px; border-radius: 16px; background-color: rgba(0,0,0,0.4); color: white; font-size: 14px; border-width: 0; }
+.fullscreen-float-btn { position: absolute; bottom: 10px; right: 10px; width: 30px; height: 30px; background-color: rgba(0,0,0,0.5); color: white; border-radius: 4px; border-width: 0; font-size: 18px; }

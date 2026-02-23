@@ -1,0 +1,7 @@
+
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="Root" class="asset-item">
+        <ui:VisualElement name="Icon" class="asset-icon" />
+        <ui:Label name="Name" text="Asset Name" class="asset-name" />
+    </ui:VisualElement>
+</ui:UXML>

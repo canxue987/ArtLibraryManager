@@ -1,0 +1,222 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" editor-extension-mode="False">
+    <!-- 引用样式表 -->
+    <Style src="LibraryStyle.uss" />
+
+    <ui:VisualElement class="container">
+        <!-- ========================================================= -->
+        <!-- [新] 顶部导航栏 (Header Bar) -->
+        <!-- ========================================================= -->
+        <ui:VisualElement class="header-bar">
+            <!-- 左侧：Logo/标题 -->
+            <ui:Label text="ASSET LIBRARY" class="window-title" />
+
+            <!-- 中间：导航菜单 -->
+            <ui:VisualElement class="nav-container">
+                <!-- 1. Gallery (主页) -->
+                <ui:Button name="NavBtnGallery" text="Gallery" class="nav-tab active" />
+                
+                <!-- 2. Ingest (导入) - 下拉菜单容器 -->
+                <!-- 注意：这是一个 VisualElement，利用 :hover CSS 显示内部菜单 -->
+                <ui:VisualElement name="NavIngestContainer" class="nav-tab-dropdown-container">
+                    <ui:Label text="Ingest ▾" class="nav-tab-label" />
+                    
+                    <!-- 悬浮下拉菜单 -->
+                    <ui:VisualElement class="dropdown-menu">
+                        <ui:Button name="BtnIngestModel" text="Import Models" class="dropdown-item" />
+                        <ui:Button name="BtnIngestTexture" text="Import Textures" class="dropdown-item" />
+                        <ui:Button name="BtnIngestSound" text="Import Sounds" class="dropdown-item" />
+                        <!-- 预留功能 -->
+                        <ui:Button name="BtnIngestVFX" text="Import VFX (Prefab)" class="dropdown-item" />
+                        <ui:Button name="BtnIngestVideo" text="Import Video" class="dropdown-item" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+
+                <!-- 3. Settings (设置) -->
+                <ui:Button name="NavBtnSettings" text="Settings" class="nav-tab" />
+            </ui:VisualElement>
+
+            <!-- 右侧：关闭按钮 -->
+            <ui:Button name="BtnCloseApp" text="✕" class="close-button" />
+        </ui:VisualElement>
+
+        <!-- ========================================================= -->
+        <!-- 主内容区 (Sidebar + Content) -->
+        <!-- ========================================================= -->
+        <ui:VisualElement style="flex-direction: row; flex-grow: 1;">
+            
+            <!-- [修改] 左侧侧边栏：极简风格 -->
+            <ui:VisualElement class="sidebar">
+                <!-- 顶部工具栏：标题 + 刷新 -->
+                <ui:VisualElement style="flex-direction: row; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <ui:Label text="LIBRARY" class="section-header" style="margin: 0;" />
+                    <ui:Button name="BtnScan" text="↻" class="icon-btn" tooltip="Refresh Library" />
+                    <ui:Button name="BtnTestBatchModel" text="Test Batch Model" class="filter-btn" />  
+                </ui:VisualElement>
+
+                <!-- 搜索框 -->
+                <ui:TextField name="SearchField" placeholder-text="Search assets..." class="search-field" style="margin-bottom: 20px;" />
+
+                <!-- 分类筛选 -->
+                <ui:Label text="CATEGORIES" class="section-header" />
+                <ui:Button name="BtnModel" text="Models" class="filter-btn" />
+                <ui:Button name="BtnTexture" text="Textures" class="filter-btn" />
+                <ui:Button name="BtnSound" text="Sounds" class="filter-btn" />
+                
+                <ui:VisualElement style="flex-grow: 1;" />
+                <ui:Label text="v2.0" style="color: rgba(255,255,255,0.1); font-size: 10px; align-self: center; margin-bottom: 5px;" />
+            </ui:VisualElement>                
+
+            <!-- 右侧资产网格 (保持不变) -->
+            <ui:VisualElement class="content-area">
+                <ui:VisualElement name="WelcomePanel" style="flex-grow: 1; align-items: center; justify-content: center;">
+                    <ui:Label text="Welcome to Asset Library" style="font-size: 24px; color: gray; -unity-font-style: bold;" />
+                    <ui:Label text="Select a category or use 'Ingest' menu to add assets" style="color: gray; margin-top: 10px;" />
+                </ui:VisualElement>
+
+                <ui:ScrollView name="AssetScrollView" style="display: none; flex-grow: 1;">
+                    <ui:VisualElement name="AssetGrid" class="asset-grid" />
+                </ui:ScrollView>
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <!-- ========================================================= -->
+        <!-- 各类弹窗 (保留原有的所有 ID，确保逻辑不报错) -->
+        <!-- ========================================================= -->
+
+        <!-- 1. 详情面板 -->
+        <ui:VisualElement name="DetailPanel" class="confirm-overlay" style="display: none;">
+            <ui:VisualElement class="modal-window">
+                <ui:VisualElement class="preview-column">
+                    <ui:VisualElement class="preview-viewport">
+                        <ui:Image name="DetailImage" class="preview-content" />
+                        <ui:VisualElement name="LoadingOverlay" class="loading-overlay" style="display: none;">
+                            <ui:Label name="LoadingLabel" text="Loading... 0%" class="loading-text" />
+                            <ui:VisualElement class="progress-track"><ui:VisualElement name="LoadingFill" class="progress-fill" /></ui:VisualElement>
+                        </ui:VisualElement>
+                        <ui:VisualElement name="ViewModeSwitch" style="position: absolute; bottom: 10px; left: 10px; flex-direction: row; background-color: rgba(0,0,0,0.5); border-radius: 4px; padding: 2px;">
+                            <ui:Button name="BtnViewTextured" text="Tex" style="width: 40px; height: 24px; font-size: 10px; margin: 0; border-radius: 2px; background-color: rgb(46, 134, 222); color: white; border-width: 0;" />
+                            <ui:Button name="BtnViewClay" text="Clay" style="width: 40px; height: 24px; font-size: 10px; margin: 0; border-radius: 2px; background-color: transparent; color: rgb(180,180,180); border-width: 0;" />
+                        </ui:VisualElement>
+                        <ui:Button name="BtnDetailFullscreen" text="⛶" class="fullscreen-float-btn" tooltip="Fullscreen" />
+                    </ui:VisualElement>
+                    <ui:Label name="DetailHintLabel" text="LMB: Rotate | Scroll: Zoom" class="overlay-hint" style="top: 10px; bottom: auto; left: 10px;" />
+                </ui:VisualElement>
+                
+                <ui:VisualElement class="properties-column">
+                    <ui:ScrollView style="flex-grow: 1;">
+                        <ui:VisualElement name="ViewContainer">
+                            <ui:Label name="DetailName" text="Asset Name" class="panel-header" />
+                            <ui:VisualElement class="form-group"><ui:Label name="DetailType" text="MODEL" style="color: rgb(46, 134, 222); font-size: 12px; -unity-font-style: bold;" /></ui:VisualElement>
+                            <ui:VisualElement class="form-group"><ui:Label text="Path" class="form-label" /><ui:Label name="DetailPath" text="..." style="color: gray; font-size: 11px; white-space: normal;" /></ui:VisualElement>
+                            <ui:VisualElement class="form-group"><ui:Label text="Tags" class="form-label" /><ui:VisualElement class="tag-container"><ui:Label name="DetailTags" text="None" style="color: white;" /></ui:VisualElement></ui:VisualElement>
+                            <ui:VisualElement class="form-group"><ui:Label text="Description" class="form-label" /><ui:Label name="DetailDesc" text="..." style="color: rgb(200, 200, 200); white-space: normal;" /></ui:VisualElement>
+                            <ui:VisualElement class="action-bar" style="border-top-width: 0;">
+                                <ui:Button name="BtnOpenInExplorer" text="Folder" class="btn-secondary" />
+                                <ui:Button name="BtnEdit" text="Edit" class="btn-secondary" />
+                                <ui:Button name="BtnDelete" text="Delete" class="btn-danger" />
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                        <ui:VisualElement name="EditContainer" style="display: none;">
+                            <ui:Label text="Edit Asset" class="panel-header" />
+                            <ui:VisualElement class="form-group"><ui:Label text="Tags" class="form-label" /><ui:VisualElement class="tag-container"><ui:TextField name="EditTagsField" /></ui:VisualElement></ui:VisualElement>
+                            <ui:VisualElement class="form-group"><ui:Label text="Description" class="form-label" /><ui:TextField name="EditDescField" multiline="true" style="height: 80px;" /></ui:VisualElement>
+                            <ui:VisualElement class="action-bar"><ui:Button name="BtnCancelEdit" text="Cancel" class="btn-secondary" /><ui:Button name="BtnSaveEdit" text="Save" class="btn-primary" /></ui:VisualElement>
+                        </ui:VisualElement>
+                    </ui:ScrollView>
+                    <ui:Button name="BtnCloseDetail" text="✕" class="floating-close-btn" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <!-- 2. 批量导入面板 (保持核心逻辑 ID) -->
+        <ui:VisualElement name="BatchImportPanel" class="confirm-overlay" style="display: none;">
+            <ui:VisualElement class="modal-window" style="width: 90%; height: 90%; max-width: 1600px; flex-direction: column;">
+                <!-- 批量顶部 -->
+                <ui:VisualElement style="height: 50px; background-color: rgb(35,35,35); border-bottom-width: 1px; border-bottom-color: rgb(60,60,60); flex-direction: row; align-items: center; padding-left: 20px; padding-right: 20px;">
+                    <ui:Label text="Batch Ingest" style="font-size: 18px; -unity-font-style: bold; color: white; margin-right: 20px;" />
+                    <ui:Label name="BatchStatusLabel" text="Ready" style="color: gray; margin-right: 20px; flex-grow: 1; -unity-text-align: middle-right;" />
+                    <!-- 模式选择器 -->
+                    <ui:RadioButtonGroup name="BatchModeSelector" choices="Models,Textures,Sounds" value="0" class="mode-selector" />
+                    <ui:VisualElement style="flex-grow: 1;" />
+                    <ui:Button name="BtnBatchSelectFolder" text="Select Folder..." class="btn-secondary" style="width: 150px;" />
+                    <ui:Button name="BtnBatchAutoMatch" text="Auto Match" class="btn-secondary" style="background-color: rgb(211, 84, 0); margin-left: 5px;" />
+                    <ui:Button name="BtnBatchProcess" text="Start Import" class="btn-primary" style="margin-left: 10px; height: 35px;" />
+                    <ui:Button name="BtnCloseBatch" text="✕" class="close-button" style="margin-left: 20px;" />
+                </ui:VisualElement>
+                
+                <!-- 批量内容三栏 -->
+                <ui:VisualElement style="flex-grow: 1; flex-direction: row;">
+                    <ui:VisualElement style="width: 25%; background-color: rgb(40,40,40); border-right-width: 1px; border-right-color: rgb(60,60,60);">
+                        <ui:Label text="1. Files Found" style="padding: 10px; color: rgb(150,150,150); -unity-font-style: bold;" />
+                        <ui:ScrollView name="BatchModelList" style="flex-grow: 1;" />
+                    </ui:VisualElement>
+                    <ui:VisualElement style="width: 40%; background-color: rgb(45,45,45); border-right-width: 1px; border-right-color: rgb(60,60,60); padding: 15px;">
+                        <ui:Label text="2. Properties &amp; Materials" style="color: rgb(150,150,150); -unity-font-style: bold; margin-bottom: 10px;" />
+                        <ui:VisualElement name="BatchSlotContainer" style="flex-grow: 1;" />
+                    </ui:VisualElement>
+                    <ui:VisualElement style="flex-grow: 1; background-color: rgb(35,35,35); padding: 10px;">
+                        <ui:Label text="3. Texture Gallery" style="color: rgb(150,150,150); -unity-font-style: bold; margin-bottom: 10px;" />
+                        <ui:TextField name="BatchTextureSearch" placeholder-text="Filter textures..." style="margin-bottom: 10px;" />
+                        <ui:ScrollView name="BatchTextureGallery" style="flex-grow: 1; flex-direction: row; flex-wrap: wrap;" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <!-- 3. 设置 / 删除 / 退出 / 全屏预览 等其他弹窗 (保持原样) -->
+        <ui:VisualElement name="DeleteConfirmOverlay" class="confirm-overlay" style="display: none;">
+            <ui:VisualElement class="small-modal">
+                <ui:Label text="Delete Asset" class="panel-header" />
+                <ui:Label name="DeleteAssetName" text="Asset Name" style="color: white; font-size: 14px; margin-bottom: 10px;" />
+                <ui:Label text="Are you sure? This cannot be undone." style="color: gray; margin-bottom: 20px;" />
+                <ui:VisualElement class="action-bar"><ui:Button name="BtnOverlayCancelDelete" text="Cancel" class="btn-secondary" /><ui:Button name="BtnOverlayConfirmDelete" text="Delete" class="btn-danger" /></ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement name="SettingsPanel" class="confirm-overlay" style="display: none;">
+            <ui:VisualElement class="small-modal">
+                <ui:Label text="Library Settings" class="panel-header" />
+                <ui:VisualElement class="form-group">
+                    <ui:Label text="Library Path" class="form-label" />
+                    <ui:VisualElement style="flex-direction: row;">
+                        <ui:TextField name="SettingsPathField" style="flex-grow: 1; margin-right: 5px;" />
+                        <ui:Button name="BtnBrowsePath" text="..." class="btn-secondary" style="width: 30px; padding: 0;" />
+                    </ui:VisualElement>
+                    <ui:Label text="* Changing path will require a restart or re-scan." style="color: gray; font-size: 10px; margin-top: 5px;" />
+                </ui:VisualElement>
+                <ui:VisualElement class="action-bar"><ui:Button name="BtnCancelSettings" text="Cancel" class="btn-secondary" /><ui:Button name="BtnSaveSettings" text="Save" class="btn-primary" /></ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement name="QuitConfirmDialog" class="confirm-overlay" style="display: none;">
+            <ui:VisualElement class="small-modal" style="height: auto;">
+                <ui:Label text="Exit Application" class="panel-header" />
+                <ui:Label text="Are you sure you want to quit?" style="color: white; margin-bottom: 20px;" />
+                <ui:VisualElement class="action-bar"><ui:Button name="BtnCancelQuit" text="Cancel" class="btn-secondary" /><ui:Button name="BtnConfirmQuit" text="Exit" class="btn-danger" /></ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <!-- 全屏查看器 -->
+        <ui:VisualElement name="ImageViewerOverlay" class="confirm-overlay" style="display: none; background-color: black;">
+            <ui:VisualElement name="ImageViewport" style="overflow: hidden; width: 100%; height: 100%;"><ui:Image name="FullSizeImage" style="width: 100%; height: 100%; -unity-background-scale-mode: scale-to-fit;" /></ui:VisualElement>
+            <ui:Label text="Scroll to Zoom • Drag to Pan" class="overlay-hint" />
+            <ui:Button name="BtnCloseImageViewer" text="✕" class="floating-close-btn" />
+        </ui:VisualElement>
+        <ui:VisualElement name="ModelViewerOverlay" class="confirm-overlay" style="display: none; background-color: black;">
+            <ui:Image name="ModelFullSizeImage" style="width: 100%; height: 100%; -unity-background-scale-mode: scale-to-fit;" />
+            <ui:VisualElement style="position: absolute; bottom: 20px; left: 20px; flex-direction: row; background-color: rgba(0,0,0,0.5); border-radius: 4px; padding: 2px;">
+                <ui:Button name="BtnFullViewTextured" text="Tex" style="width: 50px; height: 30px; font-size: 12px; margin: 0; border-radius: 2px; background-color: rgb(46, 134, 222); color: white; border-width: 0;" />
+                <ui:Button name="BtnFullViewClay" text="Clay" style="width: 50px; height: 30px; font-size: 12px; margin: 0; border-radius: 2px; background-color: transparent; color: rgb(180,180,180); border-width: 0;" />
+            </ui:VisualElement>
+            <ui:Label text="Left Drag: Rotate | Scroll: Zoom" class="overlay-hint" style="top: 20px; bottom: auto; left: 20px;" />
+            <ui:Button name="BtnCloseModelViewer" text="✕" class="floating-close-btn" />
+        </ui:VisualElement>
+
+        <!-- (旧)单独导入面板：为了代码兼容性暂时保留ID，但默认隐藏且无入口 -->
+        <ui:VisualElement name="ImportPanel" class="confirm-overlay" style="display: none;">
+            <!-- 内容保留略，防止 MainUIController_Import.cs 报错，实际使用中不再调用它 -->
+            <ui:VisualElement class="modal-window"><ui:Label text="Legacy Import Panel" /></ui:VisualElement>
+        </ui:VisualElement>
+
+    </ui:VisualElement>
+</ui:UXML>
